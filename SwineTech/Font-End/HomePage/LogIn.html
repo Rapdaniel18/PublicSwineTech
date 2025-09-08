@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SwineTech - Log In</title>
+  <link rel="stylesheet" href="LogIn.css" />
+</head>
+<body>
+  <header>
+    <div class="navbar">
+      <div class="logo-brand">
+         <a href="Homepage.html"><img src="logo.jpg" alt="SwineTech Logo" class="logo" ></a>
+        <span class="brand"><strong>SwineTech</strong></span>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="Register.html">Register</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="login-container">
+    <section>
+      <div class="login-left">
+        <h2 class="motto">The only Piggery Farm Manager App you Need!</h2>
+      </div>
+    </section>
+
+    <div class="login-box">
+      <h1 class="login-title">Log In</h1>
+      <form method="POST" action="login.php">
+        <select name="role" class="login-input" required>
+          <option value="" disabled selected>Select Role</option>
+          <option value="admin">Admin</option>
+          <option value="sales">Sales Staff</option>
+          <option value="procurement">Procurement Staff</option>
+          <option value="caretaker">Caretaker</option>
+          <option value="client">Client</option>
+        </select>
+
+        <input type="text" name="username" placeholder="Email or Phone Number" class="login-input" required>
+        <input type="password" name="password" placeholder="Password" class="login-input" required>
+
+        <button type="submit" class="login-btn">Log In</button>
+      </form>
+      <a href="#" class="forgot-password">Forgot your password?</a>
+    </div>
+  </div>
+</body>
+</html>

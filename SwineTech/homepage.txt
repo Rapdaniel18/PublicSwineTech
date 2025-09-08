@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="Hompage.css">
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <div class="logo-brand" >
+               <a href="Homepage.html"><img src="logo.jpg" alt="SwineTech Logo" class="logo" ></a>
+                <span class="brand"><strong>SwineTech</strong></span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li  class="dropdown">
+                        <a href="login.html" class="dropbtn">Log in</a>
+                        <div class="dropdown-content">
+                            <a href="#admin">Admin</a>
+                            <a href="#sales">Sales Staff</a>
+                            <a href="#procurement">Procurement Staff</a>
+                            <a href="#caretaker">CareTaker</a>
+                            <a href="#client">Client</a>
+                            
+                        </div>
+                    </li>
+                    <li><a href="#register">Register</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <div id="title"><h1>Welcome To Ruloma Farms</h1></div>
+    
+    <div id="motto"><h2>The only Piggery Farm Manager App you Need!</h2></div>
+    
+</body>
+<script src="Hompage.js"></script>
+</html>
+
+#title{
+    text-align: center;
+}
+body{
+    background-color: pink;
+}
+/* Navigation Bar Styles */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    padding: 20px 40px 10px 40px;
+}
+.logo-brand {
+    display: flex;
+    align-items: center;
+}
+.logo {
+    height: 40px;
+    margin-right: 10px;
+    border-radius: 100px;
+}
+.brand {
+    font-size: 2rem;
+    font-family: 'Arial Black', Arial, sans-serif;
+    color: #231f20;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 60px;
+    margin: 0;
+    padding: 0;
+}
+nav ul li {
+    margin: 0;
+}
+nav ul li a {
+    text-decoration: none;
+    color: #231f20;
+    font-size: 1.3rem;
+    font-family: Arial, sans-serif;
+    font-weight: normal;
+    transition: color 0.2s;
+}
+nav ul li a:hover {
+    color: #e75480;
+}
+header {
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    padding: 20px 40px 10px 40px;
+}
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+}
+nav ul li {
+    margin: 0 20px;
+}
+nav ul li a {
+    text-decoration: none;
+    color: #0b0b0b;
+    font-weight: bold;
+    font-size: 18px;
+    transition: color 0.2s;
+}
+nav ul li a:hover {
+    color: #c71585;
+    text-decoration: underline;
+}
+
+/* Dropdown Styles */
+.dropdown {
+position: relative;
+}
+.dropbtn {
+cursor: pointer;
+}
+.dropdown-content {
+display: none;
+position: absolute;
+right: 0;
+background-color: #fff;
+min-width: 180px;
+box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+z-index: 1;
+border-radius: 4px;
+padding: 8px 0;
+}
+.dropdown-content a {
+color: #231f20;
+padding: 10px 20px;
+text-decoration: none;
+display: block;
+font-size: 1rem;
+font-family: Arial, sans-serif;
+transition: background 0.2s, color 0.2s;
+}
+.dropdown-content a:hover {
+background-color: #f2f2f2;
+color: #e75480;
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+
+
+// Dropdown functionality for Log in (toggle on click)
+document.addEventListener('DOMContentLoaded', function() {
+    var dropbtn = document.getElementById('loginDropBtn');
+    var dropdownContent = document.getElementById('loginDropdown');
+    // Only run if elements exist
+    if (!dropbtn || !dropdownContent) return;
+    var dropdown = dropbtn.parentElement;
+
+    // Hide dropdown initially
+    dropdownContent.style.display = 'none';
+
+    // Toggle dropdown on click
+    dropbtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        var isOpen = dropdownContent.style.display === 'block';
+        dropdownContent.style.display = isOpen ? 'none' : 'block';
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!dropdown.contains(e.target)) {
+            dropdownContent.style.display = 'none';
+        }
+    });
+
+    // Optional: close dropdown on ESC key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            dropdownContent.style.display = 'none';
+        }
+    });
+});
