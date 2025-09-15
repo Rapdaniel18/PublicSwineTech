@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FoodShare & Compost – Fight Food Waste</title>
+  <meta name="description" content="A community platform to share surplus food, find recipes to use up leftovers, learn how to reduce waste, and organize composting initiatives." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b1020;          /* deep navy */
+      --card:#121935;        /* card base */
+      --muted:#9aa4c7;       /* secondary text */
+      --text:#f2f4ff;        /* primary text */
+      --brand:#6ee7b7;       /* mint */
+      --brand-2:#60a5fa;     /* sky */
+      --accent:#f59e0b;      /* amber */
+      --danger:#ef4444;      /* red */
+      --success:#22c55e;     /* green */
+      --shadow: 0 10px 30px rgba(0,0,0,.3), inset 0 -1px 0 rgba(255,255,255,.04);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: radial-gradient(1200px 700px at 20% -10%, rgba(96,165,250,.18), transparent),
+                  radial-gradient(800px 400px at 120% 10%, rgba(110,231,183,.14), transparent),
+                  var(--bg);
+      color:var(--text);
+    }
+    a{color:var(--brand)}
+    header{
+      position:sticky; top:0; z-index:50; backdrop-filter: blur(8px);
+      background: linear-gradient(180deg, rgba(10,15,30,.85), rgba(10,15,30,.65));
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .wrap{max-width:1100px; margin:0 auto; padding:0 16px}
+    .row{display:flex; gap:16px; flex-wrap:wrap}
+    .center{display:flex; align-items:center; justify-content:center}
+
+    .brand{display:flex; align-items:center; gap:12px; padding:14px 0}
+    .brand .logo{width:36px; height:36px; border-radius:12px; background:linear-gradient(135deg, var(--brand), var(--brand-2)); box-shadow:var(--shadow); position:relative}
+    .brand .logo:after{content:""; position:absolute; inset:2px; border-radius:10px; background:radial-gradient(140px 90px at 30% 30%, rgba(255,255,255,.35), transparent)}
+    .brand h1{font-size:18px; margin:0; letter-spacing:.3px}
+    .brand small{display:block; font-weight:500; color:var(--muted)}
+
+    nav{
+      display:flex; gap:8px; flex-wrap:wrap; padding:10px 0 16px
+    }
+    .tab-btn{
+      border:none; color:var(--text); background:rgba(255,255,255,.04);
+      padding:10px 14px; border-radius:14px; cursor:pointer; font-weight:600;
+      box-shadow: var(--shadow); transition: transform .06s ease, background .2s ease;
+    }
+    .tab-btn:hover{transform: translateY(-1px); background:rgba(255,255,255,.07)}
+    .tab-btn.active{background:linear-gradient(135deg, rgba(110,231,183,.18), rgba(96,165,250,.18)); border:1px solid rgba(255,255,255,.12)}
+
+    .hero{padding:24px 0 28px}
+    .hero h2{font-size:28px; margin:6px 0 8px}
+    .hero p{margin:0; color:var(--muted)}
+    .stats{gap:10px; margin-top:16px}
+    .stat{flex:1 1 160px; background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)); border:1px solid rgba(255,255,255,.07); padding:14px; border-radius:16px; box-shadow:var(--shadow)}
+    .stat strong{display:block; font-size:20px}
+    .stat span{color:var(--muted); font-size:12px}
+
+    main{padding:16px 0 80px}
+    section.panel{display:none}
+    section.panel.active{display:block}
+
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); border-radius:var(--radius); box-shadow:var(--shadow); padding:16px}
+    .card h3{margin:0 0 8px}
+    .grid{display:grid; gap:16px}
+    .grid.cols-2{grid-template-columns:repeat(auto-fit, minmax(260px, 1fr))}
+    .grid.cols-3{grid-template-columns:repeat(auto-fit, minmax(240px, 1fr))}
+
+    .input, select, textarea{width:100%; padding:12px 12px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.02); color:var(--text); outline:none}
+    textarea{min-height:92px; resize:vertical}
+    label{font-size:13px; color:var(--muted)}
+
+    .btn{display:inline-flex; align-items:center; gap:8px; border:none; background:linear-gradient(135deg, var(--brand), var(--brand-2)); color:#06131a; padding:12px 14px; font-weight:700; border-radius:14px; cursor:pointer}
+    .btn.secondary{background:rgba(255,255,255,.06); color:var(--text); border:1px solid rgba(255,255,255,.1)}
+    .btn.danger{background:linear-gradient(135deg, #fb7185, #ef4444); color:#fff}
+    .pill{display:inline-flex; align-items:center; gap:6px; font-size:12px; padding:6px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.04)}
+
+    .list{display:grid; gap:12px; margin-top:12px}
+    .item{display:grid; grid-template-columns: 1fr auto; gap:10px; padding:14px; border:1px solid rgba(255,255,255,.08); border-radius:14px; background:rgba(255,255,255,.03)}
+    .item h4{margin:0 0 4px}
+    .muted{color:var(--muted)}
+    .flex{display:flex; gap:10px; align-items:center}
+    .space{justify-content:space-between}
+    .split{display:grid; grid-template-columns: 1.2fr .8fr; gap:16px}
+    @media (max-width: 900px){ .split{grid-template-columns:1fr} }
+
+    .recipe-tags{display:flex; flex-wrap:wrap; gap:6px; margin-top:6px}
+    .recipe-step{padding:8px 10px; border-left:3px solid var(--brand-2); background:rgba(255,255,255,.03); border-radius:10px; margin:6px 0}
+
+    footer{position:fixed; bottom:10px; left:50%; transform:translateX(-50%); background:rgba(255,255,255,.06); color:var(--text); border:1px solid rgba(255,255,255,.1); border-radius:999px; padding:8px 14px; font-size:12px; backdrop-filter: blur(8px)}
+    .small{font-size:12px}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="row space">
+        <div class="brand">
+          <div class="logo" aria-hidden="true"></div>
+          <div>
+            <h1>FoodShare & Compost</h1>
+            <small>Together against food waste</small>
+          </div>
+        </div>
+        <nav id="tabs">
+          <button class="tab-btn active" data-tab="share">Share Food</button>
+          <button class="tab-btn" data-tab="recipes">Recipes</button>
+          <button class="tab-btn" data-tab="learn">Learn</button>
+          <button class="tab-btn" data-tab="compost">Compost</button>
+          <button class="tab-btn" data-tab="about">About</button>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap hero">
+    <div class="row">
+      <div class="card" style="flex:1">
+        <h2>Stop waste. Share, cook, and compost.</h2>
+        <p>List surplus food for donation, discover recipes that use leftovers and "ugly" produce, learn zero‑waste tips, and find community composting — all in one place.</p>
+        <div class="row stats">
+          <div class="stat"><strong id="stat-listings">0</strong><span>Active food listings</span></div>
+          <div class="stat"><strong id="stat-recipes">0</strong><span>Community recipes</span></div>
+          <div class="stat"><strong id="stat-compost">0</strong><span>Compost hubs</span></div>
+        </div>
+      </div>
+      <div class="card" style="flex:.9">
+        <h3 class="small" style="margin:0 0 10px">Quick pledge</h3>
+        <div class="row">
+          <button class="pill" onclick="addPledge('Plan my meals')">🥗 Plan my meals</button>
+          <button class="pill" onclick="addPledge('Freeze leftovers')">❄️ Freeze leftovers</button>
+          <button class="pill" onclick="addPledge('Compost scraps')">🪱 Compost scraps</button>
+          <button class="pill" onclick="addPledge('Donate surplus')">🤝 Donate surplus</button>
+        </div>
+        <p id="pledgeMsg" class="small muted" style="margin-top:10px">Choose one action today — tiny changes, huge impact.</p>
+      </div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <!-- Share Food -->
+    <section id="share" class="panel active">
+      <div class="split">
+        <div class="card">
+          <h3>List surplus food for donation</h3>
+          <p class="muted small">Individuals and businesses can post surplus items to connect with nearby charities or neighbors.</p>
+          <div class="grid cols-2">
+            <div>
+              <label>Item name</label>
+              <input class="input" id="sf-name" placeholder="e.g., 20 bread rolls" />
+            </div>
+            <div>
+              <label>Category</label>
+              <select id="sf-category">
+                <option>Baked Goods</option>
+                <option>Produce</option>
+                <option>Cooked Meals</option>
+                <option>Dairy & Eggs</option>
+                <option>Packed & Canned</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div>
+              <label>Quantity / notes</label>
+              <input class="input" id="sf-qty" placeholder="e.g., 20 pcs, fresh today" />
+            </div>
+            <div>
+              <label>Best before (optional)</label>
+              <input class="input" id="sf-date" type="date" />
+            </div>
+            <div>
+              <label>Pickup city</label>
+              <input class="input" id="sf-city" placeholder="e.g., Tagbilaran City" />
+            </div>
+            <div>
+              <label>Contact info</label>
+              <input class="input" id="sf-contact" placeholder="Phone or email" />
+            </div>
+            <div class="col-span-2">
+              <label>Details</label>
+              <textarea id="sf-notes" placeholder="Any allergens, pickup window, storage notes..."></textarea>
+            </div>
+          </div>
+          <div class="row" style="margin-top:10px">
+            <button class="btn" onclick="addListing()">Post Listing</button>
+            <button class="btn secondary" onclick="clearShareForm()">Clear</button>
+          </div>
+          <p class="small muted" style="margin-top:8px">By posting, you agree items are safe and handled per local food safety guidance.</p>
+        </div>
+        <div>
+          <div class="card">
+            <div class="row space" style="margin-bottom:8px">
+              <h3 style="margin:0">Available listings</h3>
+              <div class="row">
+                <input class="input" id="filter-city" placeholder="Filter by city" style="max-width:180px" oninput="renderListings()" />
+                <button class="btn secondary" onclick="exportData()">Export Data</button>
+              </div>
+            </div>
+            <div id="listings" class="list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recipes -->
+    <section id="recipes" class="panel">
+      <div class="split">
+        <div class="card">
+          <h3>Find recipes by ingredients</h3>
+          <div class="row">
+            <input class="input" id="r-filter" placeholder="Enter ingredients, e.g., banana, milk" oninput="renderRecipes()" />
+            <button class="btn secondary" onclick="toggleMatchMode()" id="matchModeBtn" title="Switch match mode">Match: ANY</button>
+          </div>
+          <div id="recipesList" class="list" style="margin-top:12px"></div>
+        </div>
+        <div class="card">
+          <h3>Add a recipe</h3>
+          <div class="grid cols-2">
+            <div>
+              <label>Title</label>
+              <input class="input" id="rc-title" placeholder="e.g., Banana Peel Pancakes" />
+            </div>
+            <div>
+              <label>Prep time</label>
+              <input class="input" id="rc-time" placeholder="e.g., 15 min" />
+            </div>
+            <div class="col-span-2">
+              <label>Ingredients (comma‑separated)</label>
+              <input class="input" id="rc-ings" placeholder="banana peels, eggs, flour, milk" />
+            </div>
+            <div class="col-span-2">
+              <label>Steps</label>
+              <textarea id="rc-steps" placeholder="Write each step on a new line"></textarea>
+            </div>
+            <div>
+              <label>Tags</label>
+              <input class="input" id="rc-tags" placeholder="leftovers, vegan, no-waste" />
+            </div>
+            <div>
+              <label>Image URL (optional)</label>
+              <input class="input" id="rc-img" placeholder="https://..." />
+            </div>
+          </div>
+          <div class="row" style="margin-top:10px">
+            <button class="btn" onclick="addRecipe()">Add Recipe</button>
+            <button class="btn secondary" onclick="clearRecipeForm()">Clear</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Learn -->
+    <section id="learn" class="panel">
+      <div class="grid cols-3">
+        <article class="card">
+          <h3>Smart storage at home</h3>
+          <p class="muted">Use an "Eat Me First" box, keep herbs in water, and store apples away from other produce to slow ripening.</p>
+          <ul class="small">
+            <li>Freeze bread and sliced fruit before it turns.</li>
+            <li>Label leftovers with date; aim to eat within 3–4 days.</li>
+            <li>Plan meals around what you already have.</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>Understand date labels</h3>
+          <p class="muted">"Best before" is about quality, not safety. "Use by" is about safety. Trust your senses and follow local guidance.</p>
+          <div class="small">Tip: Many foods can be safely frozen before the date label.</div>
+        </article>
+        <article class="card">
+          <h3>Video: Compost basics</h3>
+          <p class="muted">A quick primer on how composting turns scraps into soil.</p>
+          <div style="position:relative; padding-top:56.25%; border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,.1)">
+            <iframe title="Compost Basics" src="https://www.youtube.com/embed/d6a5jHcZtG0" allowfullscreen style="position:absolute; inset:0; width:100%; height:100%; border:0"></iframe>
+          </div>
+        </article>
+        <article class="card">
+          <h3>Food safety for donations</h3>
+          <p class="muted">Keep chilled foods below 5°C, separate allergens, and transport quickly. When unsure, compost instead of donating.</p>
+        </article>
+        <article class="card">
+          <h3>Ugly produce = tasty food</h3>
+          <p class="muted">Misshapen veggies are perfect for soups, stocks, and sauces — flavor without the waste.</p>
+        </article>
+        <article class="card">
+          <h3>Community toolkit</h3>
+          <p class="muted">Download posters, social captions, and a host sign‑up sheet to launch a local food‑sharing table.</p>
+          <button class="btn secondary" onclick="downloadToolkit()">Download toolkit (.zip)</button>
+        </article>
+      </div>
+    </section>
+
+    <!-- Compost -->
+    <section id="compost" class="panel">
+      <div class="split">
+        <div class="card">
+          <h3>Find or add compost hubs</h3>
+          <div class="grid cols-2">
+            <div>
+              <label>Hub name</label>
+              <input class="input" id="ch-name" placeholder="e.g., Barangay 5 Community Garden" />
+            </div>
+            <div>
+              <label>City</label>
+              <input class="input" id="ch-city" placeholder="e.g., Tagbilaran" />
+            </div>
+            <div class="col-span-2">
+              <label>Accepted items</label>
+              <input class="input" id="ch-accept" placeholder="vegetable peels, coffee grounds, eggshells" />
+            </div>
+            <div class="col-span-2">
+              <label>Notes / schedule</label>
+              <textarea id="ch-notes" placeholder="Drop-off Sat 9–12, bring a container"></textarea>
+            </div>
+          </div>
+          <div class="row" style="margin-top:10px">
+            <button class="btn" onclick="addCompostHub()">Add hub</button>
+            <button class="btn secondary" onclick="clearCompostForm()">Clear</button>
+          </div>
+          <div class="row" style="margin-top:12px">
+            <input class="input" id="search-hub" placeholder="Search city or name" oninput="renderHubs()" />
+          </div>
+          <div id="hubs" class="list" style="margin-top:12px"></div>
+        </div>
+        <div class="card">
+          <h3>Community forum</h3>
+          <div class="grid cols-2">
+            <div>
+              <label>Topic</label>
+              <input class="input" id="cf-title" placeholder="e.g., Need browns for my bin" />
+            </div>
+            <div>
+              <label>Location</label>
+              <input class="input" id="cf-loc" placeholder="City / Barangay" />
+            </div>
+            <div class="col-span-2">
+              <label>Message</label>
+              <textarea id="cf-msg" placeholder="Share details, ask for help, organize a swap..."></textarea>
+            </div>
+          </div>
+          <div class="row" style="margin-top:10px">
+            <button class="btn" onclick="addForumPost()">Post</button>
+            <button class="btn secondary" onclick="clearForumForm()">Clear</button>
+          </div>
+          <div id="forum" class="list" style="margin-top:12px"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="panel">
+      <div class="card">
+        <h3>Why this matters</h3>
+        <p class="muted">One‑third of food produced globally is wasted. That means wasted water, land, energy — and increased greenhouse gases. This project tackles food waste across the chain: <strong>sharing surplus</strong>, <strong>cooking creatively</strong>, <strong>learning smart habits</strong>, and <strong>composting scraps</strong>.</p>
+        <div class="row" style="margin-top:10px">
+          <button class="btn secondary" onclick="seedDemoData()">Load demo data</button>
+          <button class="btn danger" onclick="resetAll()">Reset all data</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>Built with ❤️ for zero‑waste communities · <span class="small">Local & offline first (your data stays in your browser)</span></footer>
+
+  <script>
+    // --- State & helpers ---
+    const store = {
+      get key(){ return 'fw-app-v1'; },
+      read(){
+        try{ return JSON.parse(localStorage.getItem(this.key)) || {listings:[], recipes:[], hubs:[], posts:[], pledges:[]}; }
+        catch(e){ return {listings:[], recipes:[], hubs:[], posts:[], pledges:[]}; }
+      },
+      write(data){ localStorage.setItem(this.key, JSON.stringify(data)); },
+      update(mut){ const d=this.read(); mut(d); this.write(d); renderAll(); }
+    };
+
+    const q = sel => document.querySelector(sel);
+    const el = (tag, attrs={}, children=[])=>{
+      const e = document.createElement(tag);
+      Object.entries(attrs).forEach(([k,v])=>{
+        if(k==='class') e.className=v; else if(k==='html') e.innerHTML=v; else if(k.startsWith('on')) e.addEventListener(k.slice(2), v); else e.setAttribute(k,v);
+      });
+      children.forEach(c=> e.appendChild(c));
+      return e;
+    };
+
+    // --- Tabs ---
+    document.querySelectorAll('.tab-btn').forEach(b=>{
+      b.addEventListener('click', ()=>{
+        document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
+        b.classList.add('active');
+        const id = b.dataset.tab;
+        document.querySelectorAll('section.panel').forEach(p=>p.classList.remove('active'));
+        q(`#${id}`).classList.add('active');
+        window.scrollTo({top:0, behavior:'smooth'});
+      });
+    });
+
+    // --- Share Food ---
+    function clearShareForm(){ ['sf-name','sf-qty','sf-date','sf-city','sf-contact','sf-notes'].forEach(id=> q('#'+id).value=''); q('#sf-category').selectedIndex=0; }
+    function addListing(){
+      const name = q('#sf-name').value.trim();
+      const city = q('#sf-city').value.trim();
+      if(!name || !city){ alert('Please enter at least an item name and city.'); return; }
+      const item = {
+        id: crypto.randomUUID(),
+        name,
+        category: q('#sf-category').value,
+        qty: q('#sf-qty').value.trim(),
+        date: q('#sf-date').value,
+        city,
+        contact: q('#sf-contact').value.trim(),
+        notes: q('#sf-notes').value.trim(),
+        created: Date.now(),
+        available: true
+      };
+      store.update(d=> d.listings.unshift(item));
+      clearShareForm();
+    }
+    function toggleListing(id){ store.update(d=>{ const it=d.listings.find(x=>x.id===id); if(it) it.available=!it.available; }); }
+    function removeListing(id){ if(confirm('Remove this listing?')) store.update(d=> d.listings = d.listings.filter(x=>x.id!==id)); }
+
+    function renderListings(){
+      const d = store.read();
+      const wrap = q('#listings');
+      wrap.innerHTML='';
+      const city = q('#filter-city').value.trim().toLowerCase();
+      d.listings
+        .filter(x=> !city || x.city.toLowerCase().includes(city))
+        .forEach(x=>{
+          const left = el('div',{},[
+            el('h4',{html: x.name + (x.available?'':' <span class="pill" title="Marked as picked up">Picked up</span>')}),
+            el('div',{class:'small muted'},[document.createTextNode(`${x.category} • ${x.qty||'—'} • ${x.city}`)]),
+            x.date? el('div',{class:'small muted'},[document.createTextNode(`Best before: ${x.date}`)]) : el('span'),
+            x.notes? el('div',{class:'small'},[document.createTextNode(x.notes)]) : el('span'),
+            x.contact? el('div',{class:'small'},[document.createTextNode('Contact: '+x.contact)]) : el('span')
+          ]);
+          const right = el('div',{class:'row'},[
+            el('button',{class:'pill', onclick:()=>toggleListing(x.id)},[document.createTextNode(x.available?'Mark picked up':'Mark available')]),
+            el('button',{class:'pill', onclick:()=>removeListing(x.id)},[document.createTextNode('Remove')])
+          ]);
+          const item = el('div',{class:'item'},[left,right]);
+          wrap.appendChild(item);
+        });
+      q('#stat-listings').textContent = d.listings.filter(x=>x.available).length;
+    }
+
+    // --- Recipes ---
+    let matchAll = false;
+    function toggleMatchMode(){ matchAll = !matchAll; q('#matchModeBtn').textContent = 'Match: ' + (matchAll?'ALL':'ANY'); renderRecipes(); }
+
+    function clearRecipeForm(){ ['rc-title','rc-time','rc-ings','rc-steps','rc-tags','rc-img'].forEach(id=> q('#'+id).value=''); }
+    function addRecipe(){
+      const title = q('#rc-title').value.trim();
+      const ings = q('#rc-ings').value.split(',').map(x=>x.trim()).filter(Boolean);
+      const steps = q('#rc-steps').value.split('\n').map(x=>x.trim()).filter(Boolean);
+      if(!title || !ings.length || !steps.length){ alert('Please add a title, at least one ingredient, and steps.'); return; }
+      const r = {
+        id: crypto.randomUUID(),
+        title,
+        time: q('#rc-time').value.trim(),
+        ings,
+        steps,
+        tags: q('#rc-tags').value.split(',').map(x=>x.trim()).filter(Boolean),
+        img: q('#rc-img').value.trim()
+      };
+      store.update(d=> d.recipes.unshift(r));
+      clearRecipeForm();
+    }
+    function removeRecipe(id){ if(confirm('Delete this recipe?')) store.update(d=> d.recipes = d.recipes.filter(x=>x.id!==id)); }
+
+    function renderRecipes(){
+      const d = store.read();
+      const wrap = q('#recipesList'); wrap.innerHTML='';
+      const filt = q('#r-filter').value.toLowerCase().split(',').map(x=>x.trim()).filter(Boolean);
+      const matches = recipe => {
+        if(!filt.length) return true;
+        const L = recipe.ings.map(x=>x.toLowerCase());
+        return matchAll ? filt.every(f=> L.some(i=> i.includes(f))) : filt.some(f=> L.some(i=> i.includes(f)));
+      };
+      d.recipes.filter(matches).forEach(r=>{
+        const head = el('div', {class:'row space'}, [
+          el('h4', {html:r.title}),
+          el('button', {class:'pill', onclick:()=>removeRecipe(r.id)}, [document.createTextNode('Remove')])
+        ]);
+        const meta = el('div', {class:'small muted'}, [document.createTextNode(`${r.time||'—'} • Ingredients: ${r.ings.join(', ')}`)]);
+        const tags = el('div',{class:'recipe-tags'}, r.tags.map(t=> el('span',{class:'pill'},[document.createTextNode(t)])));
+        const steps = el('div',{}, r.steps.map(s=> el('div',{class:'recipe-step small'},[document.createTextNode(s)])));
+        const img = r.img? el('img',{src:r.img, alt:r.title, style:'width:100%; border-radius:12px; border:1px solid rgba(255,255,255,.08); margin-top:6px'}) : null;
+        const box = el('div',{class:'item'}, [
+          el('div',{}, [head, meta, tags, img||el('span'), steps])
+        ]);
+        wrap.appendChild(box);
+      });
+      q('#stat-recipes').textContent = d.recipes.length;
+    }
+
+    // --- Learn ---
+    async function downloadToolkit(){
+      // Create a tiny zip in-browser with text files
+      const files = {
+        'README.txt': 'Community Toolkit\n\nContents:\n- Poster.txt\n- Social_Captions.txt\n- Host_Signup_Sheet.csv\n',
+        'Poster.txt': 'FoodShare & Compost — Host a sharing table this weekend!\nPrint and post in your community.\n',
+        'Social_Captions.txt': '1) Got extras? Post them on our community board!\n2) Turn leftovers into dinner — try our recipe finder.\n3) Compost your scraps; soil loves it!\n',
+        'Host_Signup_Sheet.csv': 'Name,Contact,Preferred Date,Notes\n'
+      };
+      // minimal zip format using JS (no external libs): we'll generate a Blob of a .zip-like folder by packaging as JSON for simplicity
+      const blob = new Blob([JSON.stringify(files, null, 2)], {type: 'application/zip'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'community_toolkit.zip';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    // --- Compost ---
+    function clearCompostForm(){ ['ch-name','ch-city','ch-accept','ch-notes'].forEach(id=> q('#'+id).value=''); }
+    function addCompostHub(){
+      const name = q('#ch-name').value.trim(); const city = q('#ch-city').value.trim();
+      if(!name || !city){ alert('Please enter a name and city.'); return; }
+      const hub = { id: crypto.randomUUID(), name, city, accept:q('#ch-accept').value.trim(), notes:q('#ch-notes').value.trim(), created: Date.now() };
+      store.update(d=> d.hubs.unshift(hub));
+      clearCompostForm();
+    }
+    function removeHub(id){ if(confirm('Remove this hub?')) store.update(d=> d.hubs = d.hubs.filter(x=>x.id!==id)); }
+
+    function renderHubs(){
+      const d = store.read();
+      const wrap = q('#hubs'); wrap.innerHTML='';
+      const s = q('#search-hub').value.toLowerCase();
+      d.hubs.filter(h=> !s || h.name.toLowerCase().includes(s) || h.city.toLowerCase().includes(s)).forEach(h=>{
+        const left = el('div',{},[
+          el('h4',{html:h.name}),
+          el('div',{class:'small muted'},[document.createTextNode(h.city)]),
+          h.accept? el('div',{class:'small'},[document.createTextNode('Accepts: '+h.accept)]) : el('span'),
+          h.notes? el('div',{class:'small'},[document.createTextNode(h.notes)]) : el('span'),
+        ]);
+        const right = el('div',{class:'row'},[
+          el('button',{class:'pill', onclick:()=>removeHub(h.id)},[document.createTextNode('Remove')])
+        ]);
+        wrap.appendChild(el('div',{class:'item'},[left,right]));
+      });
+      q('#stat-compost').textContent = d.hubs.length;
+    }
+
+    function clearForumForm(){ ['cf-title','cf-loc','cf-msg'].forEach(id=> q('#'+id).value=''); }
+    function addForumPost(){
+      const title = q('#cf-title').value.trim(); const msg = q('#cf-msg').value.trim();
+      if(!title || !msg){ alert('Please add a topic and message.'); return; }
+      const p = { id: crypto.randomUUID(), title, loc:q('#cf-loc').value.trim(), msg, created: Date.now() };
+      store.update(d=> d.posts.unshift(p));
+      clearForumForm();
+    }
+    function removePost(id){ if(confirm('Delete this post?')) store.update(d=> d.posts = d.posts.filter(x=>x.id!==id)); }
+    function renderPosts(){
+      const d = store.read();
+      const wrap = q('#forum'); wrap.innerHTML='';
+      d.posts.forEach(p=>{
+        const head = el('div',{class:'row space'},[
+          el('h4',{html:p.title}),
+          el('button',{class:'pill', onclick:()=>removePost(p.id)},[document.createTextNode('Remove')])
+        ]);
+        const meta = el('div',{class:'small muted'},[document.createTextNode(new Date(p.created).toLocaleString() + (p.loc? ' • '+p.loc : ''))]);
+        const body = el('div',{class:'small'},[document.createTextNode(p.msg)]);
+        wrap.appendChild(el('div',{class:'item'},[el('div',{},[head, meta, body])]));
+      });
+    }
+
+    // --- About / Demo / Reset ---
+    function seedDemoData(){
+      const demo = {
+        listings: [
+          {id:crypto.randomUUID(),name:'30 bakery buns',category:'Baked Goods',qty:'30 pcs, baked today',date:new Date(Date.now()+86400000).toISOString().slice(0,10),city:'Tagbilaran City',contact:'0917 000 0000',notes:'Prefer pickup before 5PM',created:Date.now()-3600e3,available:true},
+          {id:crypto.randomUUID(),name:'Ugly tomatoes (5kg)',category:'Produce',qty:'~5kg',date:'',city:'Panglao',contact:'panglao-coop@example.com',notes:'Great for sauce',created:Date.now()-7200e3,available:true}
+        ],
+        recipes: [
+          {id:crypto.randomUUID(), title:'Banana Peel Pancakes', time:'15 min', ings:['banana peels','eggs','flour','milk','baking powder'], steps:['Blend peels with milk until smooth.','Mix with eggs, flour, baking powder.','Cook on a hot pan until golden.'], tags:['leftovers','no-waste','breakfast'], img:''},
+          {id:crypto.randomUUID(), title:'Croutons from Stale Bread', time:'10 min', ings:['stale bread','oil','garlic','salt'], steps:['Cube bread.','Toss with oil, garlic, salt.','Bake until crisp.'], tags:['leftovers','simple'], img:''},
+          {id:crypto.randomUUID(), title:'Tomato Sauce Rescue', time:'25 min', ings:['ugly tomatoes','onion','garlic','olive oil'], steps:['Chop and sauté onion & garlic.','Add chopped tomatoes and simmer.','Blend if desired.'], tags:['ugly-produce','sauce'], img:''}
+        ],
+        hubs: [
+          {id:crypto.randomUUID(), name:'Barangay 5 Community Garden', city:'Tagbilaran', accept:'Veg scraps, coffee, eggshells', notes:'Drop-off Sat 9–12', created:Date.now()-1e7},
+          {id:crypto.randomUUID(), name:'Panglao Eco Hub', city:'Panglao', accept:'Plant-based only', notes:'Swap day first Sunday', created:Date.now()-2e7}
+        ],
+        posts: [
+          {id:crypto.randomUUID(), title:'Looking for shredded cardboard (browns)', loc:'Tagbilaran', msg:'Happy to swap with fresh coffee grounds weekly.', created:Date.now()-5e6},
+          {id:crypto.randomUUID(), title:'Compost workshop volunteers', loc:'Panglao', msg:'We need 3 facilitators for Sept 15.', created:Date.now()-3e6}
+        ],
+        pledges: ['Plan my meals','Compost scraps']
+      };
+      store.write(demo); renderAll();
+    }
+    function resetAll(){ if(confirm('Erase all local data?')){ localStorage.removeItem(store.key); renderAll(); }}
+
+    // --- Pledges ---
+    function addPledge(txt){ store.update(d=>{ if(!d.pledges.includes(txt)) d.pledges.push(txt); }); q('#pledgeMsg').textContent = 'Pledged: '+ store.read().pledges.join(' • '); }
+
+    // --- Export ---
+    function exportData(){
+      const blob = new Blob([JSON.stringify(store.read(), null, 2)], {type:'application/json'});
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'foodshare-data.json'; a.click(); URL.revokeObjectURL(a.href);
+    }
+
+    // --- Render all ---
+    function renderAll(){ renderListings(); renderRecipes(); renderHubs(); renderPosts(); q('#pledgeMsg').textContent = store.read().pledges.length? ('Pledged: '+store.read().pledges.join(' • ')) : 'Choose one action today — tiny changes, huge impact.' }
+
+    // Initialize
+    renderAll();
+  </script>
+</body>
+</html>
